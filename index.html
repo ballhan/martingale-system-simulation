@@ -12,34 +12,89 @@
     <div class="container">
         <h1>Martingale Simulator - v1.0</h1>
         <p>This simulator assumes player only betting on <span style="color: red;">Red</span> with American roulette rule (47.37% chance winning)</p>
-        <p class="mb-4">Learn more: <a href="https://en.wikipedia.org/wiki/Martingale_(betting_system)" target="_blank">Martingale Strategy</a> | <a href="https://en.wikipedia.org/wiki/Roulette#American_wheel_sequence" target="_blank">American Roulette Rules</a></p>
+        
+        <ul class="nav nav-tabs mb-3">
+            <li class="nav-item">
+                <a class="nav-link active" id="single-game-tab" data-toggle="tab" href="#single">Single Game</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="multi-game-tab" data-toggle="tab" href="#multi">Multi Game</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="odds-calculate" data-toggle="tab" href="#odds">Odds Calculate</a>
+            </li>
+        </ul>
 
-        <p class="mb-0">Initial Balance</p>
-        <div class="input-group">
-            <div class="input-group-prepend">
-                <span class="input-group-text">$</span>
+        <div class="tab-content">
+            <div class="tab-pane fade show active" id="single">
+                <p class="mb-0">Initial Balance</p>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">$</span>
+                    </div>
+                    <input type="number" class="form-control" id="singleGameInitialBalance" placeholder="Enter your balance">
+                </div>
+
+                <p class="mb-0">Amount for 1 unit</p>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">$</span>
+                    </div>
+                    <input type="number" class="form-control" id="singleGameSingleUnit" placeholder="Enter the bet amount for 1 unit">
+                </div>
+
+                <p class="mb-0">Number of spin</p>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">#</span>
+                    </div>
+                    <input type="number" class="form-control" id="singleGameSpinCount" placeholder="Enter the number of spins">
+                </div>
+
+                <button class="btn btn-primary" onclick="simulateSingleGame()">Simulate</button>
+                <div id="singleGameLogs"></div>
             </div>
-            <input type="number" class="form-control" id="initialBalance" placeholder="Enter your balance">
-        </div>
+            
+            <div class="tab-pane fade" id="multi">
+                <p class="mb-0">Initial Balance</p>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">$</span>
+                    </div>
+                    <input type="number" class="form-control" id="multiGameInitialBalance" placeholder="Enter your balance">
+                </div>
 
-        <p class="mb-0">Amount for 1 unit</p>
-        <div class="input-group">
-            <div class="input-group-prepend">
-                <span class="input-group-text">$</span>
+                <p class="mb-0">Amount for 1 unit</p>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">$</span>
+                    </div>
+                    <input type="number" class="form-control" id="multiGameSingleUnit" placeholder="Enter the bet amount for 1 unit">
+                </div>
+
+                <p class="mb-0">Number of spin</p>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">#</span>
+                    </div>
+                    <input type="number" class="form-control" id="multiGameSpinCount" placeholder="Enter the number of spins">
+                </div>
+
+                <p class="mb-0">Number of Game</p>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">#</span>
+                    </div>
+                    <input type="number" class="form-control" id="multiGameNum" placeholder="Enter the number of games">
+                </div>
+
+                <button class="btn btn-primary" onclick="simulateMultiGame()">Simulate</button>
+                <div id="multiGameSummary"></div>
             </div>
-            <input type="number" class="form-control" id="singleUnit" placeholder="Enter the bet amount for 1 unit">
-        </div>
 
-        <p class="mb-0">Number of spin</p>
-        <div class="input-group">
-            <div class="input-group-prepend">
-                <span class="input-group-text">#</span>
+            <div class="tab-pane fade" id="odds">
             </div>
-            <input type="number" class="form-control" id="spins" placeholder="Enter the number of spins">
         </div>
-
-        <button class="btn btn-primary" onclick="simulateRoulette()">Simulate</button>
-        <div id="logs"></div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>

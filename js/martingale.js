@@ -1,10 +1,75 @@
-function simulateRoulette() {
-  const initialBalance = parseFloat(
-    document.getElementById("initialBalance").value
+function simulateSingleGame() {
+  const singleGameInitialBalance = parseFloat(
+    document.getElementById("singleGameInitialBalance").value
   );
-  const spins = parseInt(document.getElementById("spins").value);
-  const singleUnit = parseFloat(document.getElementById("singleUnit").value);
+  const singleGameSpinCount = parseInt(
+    document.getElementById("singleGameSpinCount").value
+  );
+  const singleGameSingleUnit = parseFloat(
+    document.getElementById("singleGameSingleUnit").value
+  );
 
+  simulateHelper(
+    singleGameInitialBalance,
+    singleGameSingleUnit,
+    singleGameSpinCount
+  );
+}
+
+function simulateMultiGame() {
+  const multiGameInitialBalance = parseFloat(
+    document.getElementById("multiGameInitialBalance").value
+  );
+  const multiGameSingleUnit = parseFloat(
+    document.getElementById("multiGameSingleUnit").value
+  );
+  const multiGameSpinCount = parseInt(
+    document.getElementById("multiGameSpinCount").value
+  );
+  const multiGameNum = parseFloat(
+    document.getElementById("multiGameNum").value
+  );
+
+  // for multiGame track win loss infomation
+  const multiGameResult = [];
+  for (let i = 0; i < multiGameNum; i++) {
+    multiGameResult.push(
+      simulateHelper(
+        multiGameInitialBalance,
+        multiGameSingleUnit,
+        multiGameSpinCount,
+        true
+      )
+    );
+  }
+
+  let failedNum = 0;
+  let successNum = 0;
+
+  for (let i = 0; i < multiGameResult.length; i++) {
+    if (multiGameResult[i].rounds < multiGameSpinCount) {
+      failedNum++;
+    } else {
+      successNum++;
+    }
+  }
+
+  displayMultiGameSummary(
+    multiGameInitialBalance,
+    multiGameNum,
+    multiGameResult,
+    multiGameNum,
+    failedNum,
+    successNum
+  );
+}
+
+function simulateHelper(
+  initialBalance,
+  singleUnit,
+  spinCount,
+  multiGame = false
+) {
   let totalMoney = initialBalance;
   let currentBet = singleUnit;
 
@@ -13,7 +78,7 @@ function simulateRoulette() {
   const betHistory = [];
   let redCount = 0;
 
-  for (let i = 0; i < spins && totalMoney >= currentBet; i++) {
+  for (let i = 0; i < spinCount && totalMoney >= currentBet; i++) {
     betHistory.push(currentBet);
 
     const result = spinWheel();
@@ -31,16 +96,46 @@ function simulateRoulette() {
     moneyFluctuations.push(totalMoney);
   }
 
-  const outOfMoney = totalMoney < currentBet;
+  if (!multiGame) {
+    const outOfMoney = totalMoney < currentBet;
+    displayLogs(
+      results,
+      betHistory,
+      moneyFluctuations,
+      totalMoney,
+      outOfMoney,
+      redCount
+    );
+  }
+  return { totalMoney, rounds: betHistory.length };
+}
 
-  displayLogs(
-    results,
-    betHistory,
-    moneyFluctuations,
-    totalMoney,
-    outOfMoney,
-    redCount
-  );
+function displayMultiGameSummary(
+  multiGameInitialBalance,
+  multiGameNum,
+  multiGameResult,
+  multiGameNum,
+  failedNum,
+  successNum
+) {
+  const logsElement = document.getElementById("multiGameSummary");
+  const winPercentage = ((100 * successNum) / multiGameNum).toFixed(2);
+  logsElement.innerHTML = "<h4>Summary:</h4></br>";
+  logsElement.innerHTML += `Completed ${multiGameNum} games<br/> Ran out of balance for ${failedNum} games<br/> Surivied(won money) in ${successNum} games, ${winPercentage}%`;
+  for (let i = 0; i < multiGameNum; i++) {
+    const money = multiGameResult[i].totalMoney;
+    const round = multiGameResult[i].rounds;
+
+    if (money > multiGameInitialBalance) {
+      logsElement.innerHTML += `<p class='log' style='color: green; font-weight: bold;'>Game ${
+        i + 1
+      }: Congrats on making money with end balance $${money}</p>`;
+    } else {
+      logsElement.innerHTML += `<p class='log' style='color: red; font-weight: bold;'>Game ${
+        i + 1
+      }: Didn't complete game, ran out of balance in ${round} rounds with end balance $${money}</p>`;
+    }
+  }
 }
 
 function displayLogs(
@@ -51,7 +146,7 @@ function displayLogs(
   outOfMoney,
   redCount
 ) {
-  const logsElement = document.getElementById("logs");
+  const logsElement = document.getElementById("singleGameLogs");
   logsElement.innerHTML = "<h4>Logs:</h4></br>";
 
   const roundCount = results.length;
