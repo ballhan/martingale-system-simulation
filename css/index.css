@@ -6,11 +6,6 @@ body {
   margin-top: 50px;
 }
 
-.description {
-  font-size: 18px;
-  margin-bottom: 40px;
-}
-
 #result {
   font-weight: bold;
   margin-top: 20px;
@@ -25,7 +20,7 @@ body {
 }
 
 .icon {
-  margin-right: 5px;
+  margin-right: 3px;
 }
 
 .red-icon {
@@ -41,5 +36,5 @@ body {
 }
 
 .input-group {
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }

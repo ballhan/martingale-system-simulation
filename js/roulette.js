@@ -60,9 +60,9 @@ function displayLogs(
     logsElement.innerHTML += "<strong>OUT OF BALANCE, YOU F**KED UP</strong>";
   }
   logsElement.innerHTML +=
-    `<p class='log total-money'>${redCount} Reds(${Math.floor(
+    `<p class='log total-money'>${redCount} Reds(${Number(
       (100 * redCount) / betHistory.length
-    )}%), End Balance: <strong>$` +
+    ).toFixed(2)}%), End Balance: <strong>$` +
     totalMoney.toFixed(2) +
     "</strong></p>";
 
