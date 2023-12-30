@@ -120,8 +120,8 @@ function displayMultiGameSummary(
 ) {
   const logsElement = document.getElementById("multiGameSummary");
   const winPercentage = ((100 * successNum) / multiGameNum).toFixed(2);
-  logsElement.innerHTML = "<h4>Summary:</h4></br>";
-  logsElement.innerHTML += `<strong>Completed ${multiGameNum} games<br/> Ran out of balance for ${failedNum} games<br/>Won money in ${successNum} games, ${winPercentage}%</strong></br>`;
+  logsElement.innerHTML = "<h4>Summary:</h4>";
+  logsElement.innerHTML += `<p class='mb-2'><strong>Completed ${multiGameNum} games<br/> Ran out of balance for ${failedNum} games<br/>Won money in ${successNum} games, ${winPercentage}%</strong></p>`;
 
   for (let i = 0; i < multiGameNum; i++) {
     const money = multiGameResult[i].totalMoney;
@@ -148,7 +148,7 @@ function displayLogs(
   redCount
 ) {
   const logsElement = document.getElementById("singleGameLogs");
-  logsElement.innerHTML = "<h4>Logs:</h4></br>";
+  logsElement.innerHTML = "<h4 class='mb-4'>Logs:</h4>";
 
   const roundCount = results.length;
 
@@ -157,9 +157,9 @@ function displayLogs(
   }
 
   const redPercentage = ((100 * redCount) / roundCount).toFixed(2);
-  logsElement.innerHTML += `<h6 class='log total-money'>${redCount} <span style="color: red;">Reds</span>(${redPercentage}%), End Balance: <strong>$${totalMoney.toFixed(
+  logsElement.innerHTML += `<h6 class='mb-4'>${redCount} <span style="color: red;">Reds</span>(${redPercentage}%), End Balance: <strong>$${totalMoney.toFixed(
     2
-  )}</strong></h6></br>`;
+  )}</strong></h6>`;
 
   for (let i = 0; i < roundCount; i++) {
     const iconClass =
