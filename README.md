@@ -4,6 +4,7 @@
 
 ## TODO
 - [ ] Add simulation for 10 times to calculate overall odds.
+- [ ] Add expectation calculation
 - [ ] Add graph for visual representation.
 
 Feel free to check the live version and stay tuned for the upcoming features!
