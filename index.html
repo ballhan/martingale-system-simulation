@@ -56,10 +56,10 @@
 </head>
 <body>
     <div class="container">
-        <h1 class="mb-4">Martingale Simulator - Version 1.0</h1>
-        <h2 class="description">Version 1.0 assumes you are betting on red everytime with American roulette rules</h2>
+        <h1 class="mb-4">Martingale Simulator - V1.0</h1>
+        <h2 class="description">V1.0 assumes only betting on <span style="color: red;">Red</span> with American roulette rule (47.37% chance winning)</h2>
 
-        <p>$$$ before the game(for tracking total and my tolerance)</p>
+        <p>Initial Balance</p>
         <div class="input-group">
             <div class="input-group-prepend">
                 <span class="input-group-text">$</span>
@@ -67,7 +67,7 @@
             <input type="number" class="form-control" id="initialBalance" placeholder="Enter your balance">
         </div>
 
-        <p>$$$ amount for 1 unit</p>
+        <p>Amount for 1 unit</p>
         <div class="input-group">
             <div class="input-group-prepend">
                 <span class="input-group-text">$</span>
@@ -106,6 +106,7 @@
             var results = [];
             var moneyFluctuations = [];
             var betHistory = [];
+            let redCount = 0;
 
             for (var i = 0; i < spins && totalMoney >= currentBet; i++) {
                 betHistory.push(currentBet);
@@ -115,6 +116,7 @@
                 if (isRed(result)) {
                     totalMoney += currentBet;  // You win when betting on red
                     currentBet = singleUnit;
+                    redCount++;
                 } else {
                     totalMoney -= currentBet;
                     currentBet = doubleDownBet(currentBet);
@@ -129,14 +131,17 @@
                 outOfMoney = true;
             }
         
-            console.log(betHistory, moneyFluctuations, totalMoney)
-            displayLogs(results, betHistory, moneyFluctuations, totalMoney, outOfMoney);
+            displayLogs(results, betHistory, moneyFluctuations, totalMoney, outOfMoney, redCount);
         }
 
 
-        function displayLogs(results, betHistory, moneyFluctuations, totalMoney, outOfMoney) {
+        function displayLogs(results, betHistory, moneyFluctuations, totalMoney, outOfMoney, redCount) {
             var logsElement = document.getElementById("logs");
             logsElement.innerHTML = "<h5>Logs:</h5>";
+            if (outOfMoney) {
+                logsElement.innerHTML += "<strong>OUT OF BALANCE, YOU F**KED UP</strong>";
+            }
+            logsElement.innerHTML += `<p class='log total-money'>${redCount} Reds(${Math.floor(100 * redCount/betHistory.length)}%), End Balance: <strong>$` + totalMoney.toFixed(2) + "</strong></p>";
 
             for (var i = 0; i < results.length; i++) {
                 var iconClass;
@@ -147,7 +152,7 @@
                     iconClass = isRed(results[i]) ? "fas fa-circle red-icon" : "fas fa-circle black-icon";
                 }
 
-                let betMessage = `Bet ${betHistory[i]}, `;
+                let betMessage = `Bet $${betHistory[i]}, `;
                 let resultMessage = isRed(results[i]) ? `<strong> WIN +$${betHistory[i]}</strong>` : `<strong> LOSS -$${betHistory[i]} </strong>`;
                 let message = betMessage + resultMessage
 
@@ -155,10 +160,6 @@
                     "<p class='log'>" + (i + 1) + ":    <i class='" + iconClass + " icon'></i>" + getResultText(results[i]) + ",  " + message + ", <strong>Balance - $" + moneyFluctuations[i].toFixed(2) + "</strong></p>";
             }
 
-            if (outOfMoney) {
-                logsElement.innerHTML += "<strong>OUT OF BALANCE FOR DOUBLE DOWN, YOU F**KED UP</strong>";
-            }
-            logsElement.innerHTML += "<p class='log total-money'>End Balance: $" + totalMoney.toFixed(2) + "</p>";
         }
 
         function spinWheel() {
@@ -167,11 +168,6 @@
 
         function doubleDownBet(previousBet) {
             return previousBet * 2;
-        }
-
-        function displayResult(totalMoney) {
-            var resultElement = document.getElementById("result");
-            resultElement.innerHTML = "<p>After the simulation, you have $" + totalMoney.toFixed(2) + ".</p>";
         }
 
         function isRed(number) {
