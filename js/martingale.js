@@ -54,16 +54,18 @@ function displayLogs(
   const logsElement = document.getElementById("logs");
   logsElement.innerHTML = "<h5>Logs:</h5>";
 
+  const roundCount = results.length;
+
   if (outOfMoney) {
-    logsElement.innerHTML += "<strong>OUT OF BALANCE, YOU F**KED UP</strong>";
+    logsElement.innerHTML += `<strong>OUT OF FUNDS at spin ${roundCount}, better luck next time</strong>`;
   }
 
-  const redPercentage = ((100 * redCount) / betHistory.length).toFixed(2);
+  const redPercentage = ((100 * redCount) / roundCount).toFixed(2);
   logsElement.innerHTML += `<p class='log total-money'>${redCount} Reds(${redPercentage}%), End Balance: <strong>$${totalMoney.toFixed(
     2
   )}</strong></p>`;
 
-  for (let i = 0; i < results.length; i++) {
+  for (let i = 0; i < roundCount; i++) {
     const iconClass =
       results[i] === 0 || results[i] === 37
         ? "fas fa-circle green-icon"
