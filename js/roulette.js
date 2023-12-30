@@ -1,25 +1,25 @@
 function simulateRoulette() {
-  var initialBalance = parseFloat(
+  const initialBalance = parseFloat(
     document.getElementById("initialBalance").value
   );
-  var spins = parseInt(document.getElementById("spins").value);
+  const spins = parseInt(document.getElementById("spins").value);
   const singleUnit = parseFloat(document.getElementById("singleUnit").value);
 
-  var totalMoney = initialBalance;
-  var currentBet = singleUnit;
+  let totalMoney = initialBalance;
+  let currentBet = singleUnit;
 
-  var results = [];
-  var moneyFluctuations = [];
-  var betHistory = [];
+  const results = [];
+  const moneyFluctuations = [];
+  const betHistory = [];
   let redCount = 0;
 
-  for (var i = 0; i < spins && totalMoney >= currentBet; i++) {
+  for (let i = 0; i < spins && totalMoney >= currentBet; i++) {
     betHistory.push(currentBet);
 
-    var result = spinWheel();
+    const result = spinWheel();
 
     if (isRed(result)) {
-      totalMoney += currentBet; // You win when betting on red
+      totalMoney += currentBet;
       currentBet = singleUnit;
       redCount++;
     } else {
@@ -31,10 +31,7 @@ function simulateRoulette() {
     moneyFluctuations.push(totalMoney);
   }
 
-  let outOfMoney;
-  if (totalMoney < currentBet) {
-    outOfMoney = true;
-  }
+  const outOfMoney = totalMoney < currentBet;
 
   displayLogs(
     results,
@@ -54,47 +51,39 @@ function displayLogs(
   outOfMoney,
   redCount
 ) {
-  var logsElement = document.getElementById("logs");
+  const logsElement = document.getElementById("logs");
   logsElement.innerHTML = "<h5>Logs:</h5>";
+
   if (outOfMoney) {
     logsElement.innerHTML += "<strong>OUT OF BALANCE, YOU F**KED UP</strong>";
   }
-  logsElement.innerHTML +=
-    `<p class='log total-money'>${redCount} Reds(${Number(
-      (100 * redCount) / betHistory.length
-    ).toFixed(2)}%), End Balance: <strong>$` +
-    totalMoney.toFixed(2) +
-    "</strong></p>";
 
-  for (var i = 0; i < results.length; i++) {
-    var iconClass;
+  const redPercentage = ((100 * redCount) / betHistory.length).toFixed(2);
+  logsElement.innerHTML += `<p class='log total-money'>${redCount} Reds(${redPercentage}%), End Balance: <strong>$${totalMoney.toFixed(
+    2
+  )}</strong></p>`;
 
-    if (results[i] === 0 || results[i] === 37) {
-      iconClass = "fas fa-circle green-icon";
-    } else {
-      iconClass = isRed(results[i])
+  for (let i = 0; i < results.length; i++) {
+    const iconClass =
+      results[i] === 0 || results[i] === 37
+        ? "fas fa-circle green-icon"
+        : isRed(results[i])
         ? "fas fa-circle red-icon"
         : "fas fa-circle black-icon";
-    }
 
-    let betMessage = `Bet $${betHistory[i]}, `;
-    let resultMessage = isRed(results[i])
+    const betMessage = `Bet $${betHistory[i]}, `;
+    const resultMessage = isRed(results[i])
       ? `<strong> WIN +$${betHistory[i]}</strong>`
       : `<strong> LOSS -$${betHistory[i]} </strong>`;
-    let message = betMessage + resultMessage;
+    const message = betMessage + resultMessage;
 
-    logsElement.innerHTML +=
-      "<p class='log'>" +
-      (i + 1) +
-      ":    <i class='" +
-      iconClass +
-      " icon'></i>" +
-      getResultText(results[i]) +
-      ",  " +
-      message +
-      ", <strong>Balance - $" +
-      moneyFluctuations[i].toFixed(2) +
-      "</strong></p>";
+    logsElement.innerHTML += `<p class='log'>${
+      i + 1
+    }:    <i class='${iconClass} icon'></i>${getResultText(
+      results[i]
+    )},  ${message}, <strong>Balance - $${moneyFluctuations[i].toFixed(
+      2
+    )}</strong></p>`;
   }
 }
 
@@ -107,19 +96,12 @@ function doubleDownBet(previousBet) {
 }
 
 function isRed(number) {
-  // Red numbers in American roulette
-  var redNumbers = [
+  const redNumbers = [
     1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36,
   ];
   return redNumbers.includes(number);
 }
 
 function getResultText(result) {
-  if (result === 0) {
-    return "0";
-  } else if (result === 37) {
-    return "00";
-  } else {
-    return result;
-  }
+  return result === 0 ? "0" : result === 37 ? "00" : result;
 }
