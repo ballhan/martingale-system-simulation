@@ -1,0 +1,45 @@
+body {
+  background-color: #f8f9fa;
+}
+
+.container {
+  margin-top: 50px;
+}
+
+.description {
+  font-size: 18px;
+  margin-bottom: 40px;
+}
+
+#result {
+  font-weight: bold;
+  margin-top: 20px;
+}
+
+#logs {
+  margin-top: 20px;
+}
+
+.log {
+  margin-bottom: 5px;
+}
+
+.icon {
+  margin-right: 5px;
+}
+
+.red-icon {
+  color: #dc3545;
+}
+
+.black-icon {
+  color: #000000;
+}
+
+.green-icon {
+  color: #28a745;
+}
+
+.input-group {
+  margin-bottom: 10px;
+}
