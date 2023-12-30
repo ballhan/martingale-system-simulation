@@ -1,6 +1,6 @@
 # Martingale System Simulation
 
-**V1.0** is live at [https://ballhan.github.io/martingale-system-simulation/](https://ballhan.github.io/martingale-system-simulation/).
+**v2.0** is live at [https://ballhan.github.io/martingale-system-simulation/](https://ballhan.github.io/martingale-system-simulation/).
 
 ## TODO
 - [ ] Add expectation calculation
