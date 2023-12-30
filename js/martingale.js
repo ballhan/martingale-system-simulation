@@ -121,19 +121,20 @@ function displayMultiGameSummary(
   const logsElement = document.getElementById("multiGameSummary");
   const winPercentage = ((100 * successNum) / multiGameNum).toFixed(2);
   logsElement.innerHTML = "<h4>Summary:</h4></br>";
-  logsElement.innerHTML += `Completed ${multiGameNum} games<br/> Ran out of balance for ${failedNum} games<br/> Surivied(won money) in ${successNum} games, ${winPercentage}%`;
+  logsElement.innerHTML += `<strong>Completed ${multiGameNum} games<br/> Ran out of balance for ${failedNum} games<br/>Won money in ${successNum} games, ${winPercentage}%</strong></br>`;
+
   for (let i = 0; i < multiGameNum; i++) {
     const money = multiGameResult[i].totalMoney;
     const round = multiGameResult[i].rounds;
 
     if (money > multiGameInitialBalance) {
-      logsElement.innerHTML += `<p class='log' style='color: green; font-weight: bold;'>Game ${
+      logsElement.innerHTML += `<p class='log'>Game ${
         i + 1
-      }: Congrats on making money with end balance $${money}</p>`;
+      }: <span style='color: green; font-weight: bold;'>Congrats finishing with $${money}</span></p>`;
     } else {
-      logsElement.innerHTML += `<p class='log' style='color: red; font-weight: bold;'>Game ${
+      logsElement.innerHTML += `<p class='log'>Game ${
         i + 1
-      }: Didn't complete game, ran out of balance in ${round} rounds with end balance $${money}</p>`;
+      }: <span style='color: red; font-weight: bold;'>Didn't complete game, ran out in ${round} rounds with $${money}</span></p>`;
     }
   }
 }
