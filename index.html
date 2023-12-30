@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <title>Martingale Simulator</title>
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            margin-top: 50px;
+        }
+
+        #result {
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        #logs {
+            margin-top: 20px;
+        }
+
+        .log {
+            margin-bottom: 5px;
+        }
+
+        .icon {
+            margin-right: 5px;
+        }
+
+        .red-icon {
+            color: #dc3545;
+        }
+
+        .black-icon {
+            color: #000000;
+        }
+
+        .green-icon {
+            color: #28a745;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="mb-4">Roulette Simulator</h1>
+
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text">$</span>
+            </div>
+            <input type="number" class="form-control" id="initialBalance" placeholder="Enter initial balance">
+        </div>
+
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text">Number of Spins</span>
+            </div>
+            <input type="number" class="form-control" id="spins" placeholder="Enter the number of spins">
+        </div>
+
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text">$</span>
+            </div>
+            <input type="number" class="form-control" id="initialBet" placeholder="Enter the initial bet amount">
+        </div>
+
+        <button class="btn btn-primary" onclick="simulateRoulette()">Simulate</button>
+
+        <div id="logs"></div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    <script>
+        function simulateRoulette() {
+            var initialBalance = parseFloat(document.getElementById("initialBalance").value);
+            var spins = parseInt(document.getElementById("spins").value);
+            var initialBet = parseFloat(document.getElementById("initialBet").value);
+
+            var totalMoney = initialBalance;
+            var currentBet = initialBet;
+
+            var results = [];
+            var moneyFluctuations = [];
+
+            for (var i = 0; i < spins && totalMoney >= currentBet; i++) {
+                var result = spinWheel();
+
+                if (result === 0 || result === 37) {
+                    totalMoney += currentBet;  // You win when betting on green
+                    currentBet = initialBet;
+                } else {
+                    totalMoney -= currentBet;
+                    currentBet = isRed(result) ? initialBet : doubleDownBet(currentBet);
+                }
+
+                results.push(result);
+                moneyFluctuations.push(totalMoney);
+            }
+
+            displayLogs(results, moneyFluctuations, totalMoney);
+        }
+
+
+        function displayLogs(results, moneyFluctuations, totalMoney) {
+            var logsElement = document.getElementById("logs");
+            logsElement.innerHTML = "<h5>Spin Results and Money Fluctuation:</h5>";
+
+            for (var i = 0; i < results.length; i++) {
+                var iconClass;
+
+                if (results[i] === 0 || results[i] === 37) {
+                    iconClass = "fas fa-circle green-icon";
+                } else {
+                    iconClass = isRed(results[i]) ? "fas fa-circle red-icon" : "fas fa-circle black-icon";
+                }
+
+                logsElement.innerHTML +=
+                    "<p class='log'><i class='" + iconClass + " icon'></i>Spin " + (i + 1) + ": Result - " + getResultText(results[i]) + ", Money - $" + moneyFluctuations[i].toFixed(2) + "</p>";
+            }
+
+            logsElement.innerHTML += "<p class='log total-money'>Total Money: $" + totalMoney.toFixed(2) + "</p>";
+        }
+
+        function spinWheel() {
+            return Math.floor(Math.random() * 37);
+        }
+
+        function doubleDownBet(previousBet) {
+            return previousBet * 2;
+        }
+
+        function displayResult(totalMoney) {
+            var resultElement = document.getElementById("result");
+            resultElement.innerHTML = "<p>After the simulation, you have $" + totalMoney.toFixed(2) + ".</p>";
+        }
+
+        function isRed(number) {
+            // Red numbers in American roulette
+            var redNumbers = [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36];
+            return redNumbers.includes(number);
+        }
+
+        function getResultText(result) {
+            if (result === 0) {
+                return "0 (Green)";
+            } else if (result === 37) {
+                return "00 (Green)";
+            } else {
+                return result + (isRed(result) ? " (Red)" : " (Black)");
+            }
+        }
+    </script>
+    
+</body>
+</html>
