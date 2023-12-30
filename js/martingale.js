@@ -52,18 +52,18 @@ function displayLogs(
   redCount
 ) {
   const logsElement = document.getElementById("logs");
-  logsElement.innerHTML = "<h5>Logs:</h5>";
+  logsElement.innerHTML = "<h4>Logs:</h4></br>";
 
   const roundCount = results.length;
 
   if (outOfMoney) {
-    logsElement.innerHTML += `<strong>OUT OF FUNDS at spin ${roundCount}, better luck next time</strong>`;
+    logsElement.innerHTML += `<h6><strong>OUT OF FUNDS at spin ${roundCount}, better luck next time</strong><h6>`;
   }
 
   const redPercentage = ((100 * redCount) / roundCount).toFixed(2);
-  logsElement.innerHTML += `<p class='log total-money'>${redCount} Reds(${redPercentage}%), End Balance: <strong>$${totalMoney.toFixed(
+  logsElement.innerHTML += `<h6 class='log total-money'>${redCount} <span style="color: red;">Reds</span>(${redPercentage}%), End Balance: <strong>$${totalMoney.toFixed(
     2
-  )}</strong></p>`;
+  )}</strong></h6></br>`;
 
   for (let i = 0; i < roundCount; i++) {
     const iconClass =
@@ -83,7 +83,7 @@ function displayLogs(
       i + 1
     }:    <i class='${iconClass} icon'></i>${getResultText(
       results[i]
-    )},  ${message}, <strong>Balance - $${moneyFluctuations[i].toFixed(
+    )},  ${message}, <strong>Balance $${moneyFluctuations[i].toFixed(
       2
     )}</strong></p>`;
   }
