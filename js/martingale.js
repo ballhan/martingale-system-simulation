@@ -45,8 +45,10 @@ function simulateMultiGame() {
 
   let failedNum = 0;
   let successNum = 0;
+  let redPercentage = 0;
 
   for (let i = 0; i < multiGameResult.length; i++) {
+    redPercentage += Number(multiGameResult[i].redPercentage);
     if (multiGameResult[i].rounds < multiGameSpinCount) {
       failedNum++;
     } else {
@@ -54,13 +56,16 @@ function simulateMultiGame() {
     }
   }
 
+  redPercentage = (redPercentage / multiGameNum).toFixed(2);
+
   displayMultiGameSummary(
     multiGameInitialBalance,
     multiGameNum,
     multiGameResult,
     multiGameNum,
     failedNum,
-    successNum
+    successNum,
+    redPercentage
   );
 }
 
@@ -107,7 +112,8 @@ function simulateHelper(
       redCount
     );
   }
-  return { totalMoney, rounds: betHistory.length };
+  const redPercentage = ((100 * redCount) / betHistory.length).toFixed(2);
+  return { redPercentage, totalMoney, rounds: betHistory.length };
 }
 
 function displayMultiGameSummary(
@@ -116,12 +122,13 @@ function displayMultiGameSummary(
   multiGameResult,
   multiGameNum,
   failedNum,
-  successNum
+  successNum,
+  redPercentage
 ) {
   const logsElement = document.getElementById("multiGameSummary");
   const winPercentage = ((100 * successNum) / multiGameNum).toFixed(2);
   logsElement.innerHTML = "<h4>Summary:</h4>";
-  logsElement.innerHTML += `<p class='mb-2'><strong>Completed ${multiGameNum} games<br/> Ran out of balance for ${failedNum} games<br/>Won money in ${successNum} games, ${winPercentage}%</strong></p>`;
+  logsElement.innerHTML += `<p class='mb-2'><strong>Completed ${multiGameNum} games<br/> Ran out of balance for ${failedNum} games<br/>Won money in ${successNum} games, ${winPercentage}%<br/><span style="color: red;">Reds</span>(${redPercentage}%)</span></strong></p>`;
 
   for (let i = 0; i < multiGameNum; i++) {
     const money = multiGameResult[i].totalMoney;
