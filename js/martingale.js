@@ -222,7 +222,6 @@ function oddsHelper(initialBalance, singleUnit, targetGain) {
   let redCount = 0;
 
   while (win === false && totalMoney >= currentBet) {
-    console.log("hit", totalMoney, currentBet);
     betHistory.push(currentBet);
 
     const result = spinWheel();
@@ -237,14 +236,11 @@ function oddsHelper(initialBalance, singleUnit, targetGain) {
     }
 
     results.push(result);
-    console.log(result);
     moneyFluctuations.push(totalMoney);
     if (totalMoney - initialBalance >= targetGain) {
-      console.log("hit");
       win = true;
     }
   }
-  console.log(redCount, betHistory, moneyFluctuations);
   const redPercentage = ((100 * redCount) / betHistory.length).toFixed(2);
   return { redPercentage, totalMoney, rounds: betHistory.length, win };
 }
@@ -262,7 +258,6 @@ function simulateOdds() {
   const oddsGameNum = parseInt(document.getElementById("oddsGameNum").value);
 
   let simulateResult = [];
-  console.log(oddsInitialBalance, oddsSingleUnit, oddsTargetGain, oddsGameNum);
   for (let i = 0; i < oddsGameNum; i++) {
     simulateResult.push(
       oddsHelper(oddsInitialBalance, oddsSingleUnit, oddsTargetGain)
@@ -278,7 +273,6 @@ function simulateOdds() {
   }
   winPercentage = ((100 * successNum) / oddsGameNum).toFixed(2);
   redPercentageCount = (redPercentageCount / oddsGameNum).toFixed(2);
-  console.log("simulateResult", redPercentageCount);
   displayOddsSummary(
     simulateResult,
     successNum,
@@ -290,12 +284,11 @@ function simulateOdds() {
 function displayOddsSummary(result, successNum, winPercentage, redPercentage) {
   const logsElement = document.getElementById("oddsSummary");
   logsElement.innerHTML = "<h4>Summary:</h4>";
-  logsElement.innerHTML += `<p class='mb-2'><strong>Completed ${successNum} games(${winPercentage}%)<br/> Won money in ${successNum} games, ${winPercentage}%<br/><span style="color: red;">Reds</span>(${redPercentage}%)</span></strong></p>`;
+  logsElement.innerHTML += `<p class='mb-2'><strong>Reached target gain in ${successNum} games(${winPercentage}%)<br/> <span style="color: red;">Reds</span>(${redPercentage}%)</span></strong></p>`;
 
   for (let i = 0; i < result.length; i++) {
     const money = result[i].totalMoney;
     const round = result[i].rounds;
-    console.log(result[i]);
     if (result[i].win === true) {
       logsElement.innerHTML += `<p class='log'>Game ${
         i + 1
