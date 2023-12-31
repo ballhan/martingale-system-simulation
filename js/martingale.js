@@ -292,7 +292,7 @@ function displayOddsSummary(result, successNum, winPercentage, redPercentage) {
     if (result[i].win === true) {
       logsElement.innerHTML += `<p class='log'>Game ${
         i + 1
-      }: <span style='color: green; font-weight: bold;'>Reached Target $${money} in ${round} rounds</span></p>`;
+      }: <span style='color: green; font-weight: bold;'>Reached $${money} in ${round} rounds</span></p>`;
     } else {
       logsElement.innerHTML += `<p class='log'>Game ${
         i + 1
