@@ -210,3 +210,100 @@ function isRed(number) {
 function getResultText(result) {
   return result === 0 ? "0" : result === 37 ? "00" : result;
 }
+
+function oddsHelper(initialBalance, singleUnit, targetGain) {
+  let totalMoney = initialBalance;
+  let currentBet = singleUnit;
+
+  const results = [];
+  const moneyFluctuations = [];
+  const betHistory = [];
+  let win = false;
+  let redCount = 0;
+
+  while (win === false && totalMoney >= currentBet) {
+    console.log("hit", totalMoney, currentBet);
+    betHistory.push(currentBet);
+
+    const result = spinWheel();
+
+    if (isRed(result)) {
+      totalMoney += currentBet;
+      currentBet = singleUnit;
+      redCount++;
+    } else {
+      totalMoney -= currentBet;
+      currentBet = doubleDownBet(currentBet);
+    }
+
+    results.push(result);
+    console.log(result);
+    moneyFluctuations.push(totalMoney);
+    if (totalMoney - initialBalance >= targetGain) {
+      console.log("hit");
+      win = true;
+    }
+  }
+  console.log(redCount, betHistory, moneyFluctuations);
+  const redPercentage = ((100 * redCount) / betHistory.length).toFixed(2);
+  return { redPercentage, totalMoney, rounds: betHistory.length, win };
+}
+
+function simulateOdds() {
+  const oddsInitialBalance = parseFloat(
+    document.getElementById("oddsInitialBalance").value
+  );
+  const oddsSingleUnit = parseFloat(
+    document.getElementById("oddsSingleUnit").value
+  );
+  const oddsTargetGain = parseFloat(
+    document.getElementById("oddsTargetGain").value
+  );
+  const oddsGameNum = parseInt(document.getElementById("oddsGameNum").value);
+
+  let simulateResult = [];
+  console.log(oddsInitialBalance, oddsSingleUnit, oddsTargetGain, oddsGameNum);
+  for (let i = 0; i < oddsGameNum; i++) {
+    simulateResult.push(
+      oddsHelper(oddsInitialBalance, oddsSingleUnit, oddsTargetGain)
+    );
+  }
+  let successNum = 0;
+  let redPercentageCount = 0;
+  for (let i = 0; i < simulateResult.length; i++) {
+    redPercentageCount += Number(simulateResult[i].redPercentage);
+    if (simulateResult[i].win) {
+      successNum++;
+    }
+  }
+  winPercentage = ((100 * successNum) / oddsGameNum).toFixed(2);
+  redPercentageCount = (redPercentageCount / oddsGameNum).toFixed(2);
+  console.log("simulateResult", redPercentageCount);
+  displayOddsSummary(
+    simulateResult,
+    successNum,
+    winPercentage,
+    redPercentageCount
+  );
+}
+
+function displayOddsSummary(result, successNum, winPercentage, redPercentage) {
+  const logsElement = document.getElementById("oddsSummary");
+  logsElement.innerHTML = "<h4>Summary:</h4>";
+  logsElement.innerHTML += `<p class='mb-2'><strong>Completed ${successNum} games(${winPercentage}%)<br/> Won money in ${successNum} games, ${winPercentage}%<br/><span style="color: red;">Reds</span>(${redPercentage}%)</span></strong></p>`;
+
+  for (let i = 0; i < result.length; i++) {
+    const money = result[i].totalMoney;
+    const round = result[i].rounds;
+    console.log(result[i]);
+    if (result[i].win === true) {
+      logsElement.innerHTML += `<p class='log'>Game ${
+        i + 1
+      }: <span style='color: green; font-weight: bold;'>Reached Target $${money} in ${round} rounds</span></p>`;
+    } else {
+      logsElement.innerHTML += `<p class='log'>Game ${
+        i + 1
+      }: <span style='color: red; font-weight: bold;'>Didn't complete game, ran out in ${round} rounds with $${money}</span></p>`;
+    }
+  }
+}
