@@ -1,6 +1,6 @@
 # Martingale System Simulator
 
-**v2.0** is live at [https://ballhan.github.io/martingale-system-simulation/](https://ballhan.github.io/martingale-system-simulation/).
+**v2.0** is live at [https://ballhan.github.io/martingale-system-simulator/](https://ballhan.github.io/martingale-system-simulator/).
 
 ## TODO
 - [ ] Add graph for visual representation.
